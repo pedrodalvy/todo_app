@@ -42,18 +42,20 @@ class TaskListsService
      */
     public function updateTaskList(Request $request, $id)
     {
-        $taskList = TaskList::find($id);
+        $taskList = TaskList::findOrFail($id);
         $taskList->fill($request->all())->save();
+
         return $taskList;
     }
 
     /**
      * @param $id
-     * @return bool|null
+     * @return bool
      */
     public function destroyTaskList($id)
     {
-        $taskList = TaskList::find($id);
+        $taskList = TaskList::findOrFail($id);
+
         return $taskList->delete();
     }
 }

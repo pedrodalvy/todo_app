@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\TaskListRequest as Request;
 use App\Http\Resources\Tasks\TaskListResource;
 use App\Http\Resources\Tasks\TaskListsCollection;
-use App\Models\TaskList;
 use App\Services\TaskListsService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
@@ -16,6 +15,11 @@ class TaskListsController extends Controller
 {
     private $taskListsService;
 
+    /**
+     * TaskListsController constructor.
+     *
+     * @param TaskListsService $taskListsService
+     */
     public function __construct(TaskListsService $taskListsService)
     {
         $this->taskListsService = $taskListsService;
@@ -29,7 +33,7 @@ class TaskListsController extends Controller
     public function index()
     {
         try {
-            $taskLists =  $this->taskListsService->getAllTaskLists();
+            $taskLists = $this->taskListsService->getAllTaskLists();
             return new TaskListsCollection($taskLists);
 
         } catch (\Exception $exception) {
