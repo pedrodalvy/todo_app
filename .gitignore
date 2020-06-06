@@ -13,3 +13,9 @@ yarn-error.log
 .idea
 .docker
 html
+
+public/js/app.js
+public/js/app.map.js
+
+public/css/app.css
+public/css/app.map.css
