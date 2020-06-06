@@ -18,7 +18,8 @@ Route::prefix('v1')->middleware(['auth:api', 'jwt.refresh'])
             'task_categories' => 'Tasks\TaskCategoriesController',
         ]);
 
-        Route::apiResource('tasks', 'Tasks\TasksController', ['except'=> ['index']]);
         Route::name('tasks.tasklist')
             ->get('tasks/by_task_list/{task_list}', 'Tasks\TasksController@getTasksByTaskList');
+        Route::apiResource('tasks', 'Tasks\TasksController', ['except' => ['index']]);
+
     });
