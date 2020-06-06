@@ -38,7 +38,8 @@ class TaskListsService
      */
     public function storeTaskList(Request $request)
     {
-        return TaskList::create($request->all());
+        $data = array_merge($request->all(), ['user_id' => auth()->user()->id]);
+        return TaskList::create($data);
     }
 
     /**
