@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\Models\TaskCategory;
 use App\Http\Requests\TaskCategoryRequest as Request;
+use App\Models\TaskCategory;
 
 class TaskCategoriesService
 {
@@ -12,7 +12,9 @@ class TaskCategoriesService
      */
     public function getAllTaskCategories()
     {
-        return TaskCategory::all();
+        $user = auth()->user();
+
+        return TaskCategory::where('user_id', $user->id)->get();
     }
 
     /**
@@ -21,7 +23,10 @@ class TaskCategoriesService
      */
     public function getTaskCategoryById($id)
     {
-        return TaskCategory::findOrFail($id);
+        return TaskCategory::where([
+            'id' => $id,
+            'user_id' => auth()->user()->id,
+        ])->get()->first();
     }
 
     /**
@@ -30,7 +35,10 @@ class TaskCategoriesService
      */
     public function storeTaskCategory(Request $request)
     {
-        return TaskCategory::create($request->all());
+        return TaskCategory::create([
+            'name' => $request->name,
+            'user_id' => auth()->user()->id,
+        ]);
     }
 
     /**
@@ -40,7 +48,11 @@ class TaskCategoriesService
      */
     public function updateTaskCategory(Request $request, $id)
     {
-        $taskCategory = TaskCategory::findOrFail($id);
+        $taskCategory = TaskCategory::where([
+            'id' => $id,
+            'user_id' => auth()->user()->id,
+        ])->get()->first();
+
         $taskCategory->fill($request->all())->save();
 
         return $taskCategory;
@@ -52,7 +64,11 @@ class TaskCategoriesService
      */
     public function destroyTaskCategory($id)
     {
-        $taskCategory = TaskCategory::findOrFail($id);
+        $taskCategory = TaskCategory::where([
+            'id' => $id,
+            'user_id' => auth()->user()->id,
+        ])->get()->first();
+
         return $taskCategory->delete();
     }
 }
