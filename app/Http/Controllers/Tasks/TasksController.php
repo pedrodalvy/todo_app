@@ -25,14 +25,12 @@ class TasksController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     *
      * @return TasksCollection|JsonResponse
      */
-    public function index()
+    public function getTasksByTaskList($taskListId)
     {
         try {
-            $tasks = $this->tasksService->getAllTasks();
+            $tasks = $this->tasksService->getAllTasksByTaskList($taskListId);
             return new TasksCollection($tasks);
 
         } catch (Exception $exception) {

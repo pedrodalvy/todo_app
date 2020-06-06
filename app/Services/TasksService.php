@@ -4,15 +4,22 @@ namespace App\Services;
 
 use App\Models\Task;
 use App\Http\Requests\TaskRequest as Request;
+use App\Models\TaskList;
 
 class TasksService
 {
     /**
+     * @param $taskListId
      * @return Task[]
      */
-    public function getAllTasks()
+    public function getAllTasksByTaskList($taskListId)
     {
-        return Task::paginate(Task::DEFAULT_PER_PAGE);
+        $taskList = TaskList::where([
+            'id' => $taskListId,
+            'user_id' => auth()->user()->id
+        ])->get()->first();
+
+        return $taskList->tasks()->paginate(Task::DEFAULT_PER_PAGE);
     }
 
     /**
