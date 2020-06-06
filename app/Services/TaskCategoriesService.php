@@ -35,10 +35,8 @@ class TaskCategoriesService
      */
     public function storeTaskCategory(Request $request)
     {
-        return TaskCategory::create([
-            'name' => $request->name,
-            'user_id' => auth()->user()->id,
-        ]);
+        $data = array_merge($request->all(), ['user_id' => auth()->user()->id]);
+        return TaskCategory::create($data);
     }
 
     /**
