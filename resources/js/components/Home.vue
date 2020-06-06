@@ -1,30 +1,31 @@
 <template>
     <div class="card">
+
         <div class="card-body mb-4">
             <h5 class="card-title">Todas as Listas de Tarefas</h5>
 
-            <div class="list-group">
-                <a :key="taskList.id" class="list-group-item list-group-item-action"
-                   href="#" v-for="taskList in taskLists">
+            <Spinner v-if="showSpinner" />
+            <div class="list-group mb-4">
+                <a class="list-group-item list-group-item-action"
+                   href="#" v-for="taskList in taskLists" :key="taskList.id">
                     {{taskList.name}}
                 </a>
             </div>
-        </div>
 
-        <div class="mx-4" v-if="!showForm">
-            <button @click="showForm = !showForm"
-                    class="btn btn-primary float-right mb-4 mt-0">
-                <i class="fa fa-plus mr-2"></i>
-                <span>Criar Lista</span>
-            </button>
-        </div>
-        <div v-if="showForm">
-            <FormTaskList
-                @createTaskList="createTaskList"
-                @hideForm="hideForm"/>
-        </div>
+            <div v-if="!showForm">
+                <button @click="showForm = !showForm"
+                        class="btn btn-primary float-right mb-4 mt-0">
+                    <i class="fa fa-plus mr-2"></i>
+                    <span>Criar Lista</span>
+                </button>
+            </div>
 
-
+            <div v-if="showForm">
+                <FormTaskList
+                        @createTaskList="createTaskList"
+                        @hideForm="hideForm"/>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -33,6 +34,7 @@
     import CONFIG from '../services/config';
     import helper from "../services/helper";
     import FormTaskList from "./tasks/FormTaskList";
+    import Spinner from 'vue-simple-spinner'
 
     export default {
         name: "Home",
@@ -41,10 +43,12 @@
                 taskLists: [],
                 showForm: false,
                 taskList: null,
+                showSpinner: true,
             }
         },
         components: {
-            'FormTaskList': FormTaskList
+            FormTaskList,
+            Spinner,
         },
         created() {
             const header = helper.getHeader();
@@ -53,6 +57,7 @@
                 .then(response => {
                     helper.setToken(response.headers.authorization);
                     this.taskLists = response.data.data;
+                    this.showSpinner = false;
                 })
         },
         methods: {
