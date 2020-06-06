@@ -14,7 +14,10 @@ class TaskListsService
      */
     public function getAllTaskLists()
     {
-        return TaskList::paginate(TaskList::DEFAULT_PER_PAGE);
+        $user = auth()->user();
+
+        return TaskList::where('user_id', $user->id)
+            ->paginate(TaskList::DEFAULT_PER_PAGE);
     }
 
     /**
@@ -23,7 +26,10 @@ class TaskListsService
      */
     public function getTaskListById($id)
     {
-        return TaskList::findOrFail($id);
+        return TaskList::where([
+            'id' => $id,
+            'user_id' => auth()->user()->id,
+        ])->get()->first();
     }
 
     /**
@@ -42,7 +48,11 @@ class TaskListsService
      */
     public function updateTaskList(Request $request, $id)
     {
-        $taskList = TaskList::findOrFail($id);
+        $taskList = TaskList::where([
+            'id' => $id,
+            'user_id' => auth()->user()->id,
+        ])->get()->first();
+
         $taskList->fill($request->all())->save();
 
         return $taskList;
@@ -54,7 +64,10 @@ class TaskListsService
      */
     public function destroyTaskList($id)
     {
-        $taskList = TaskList::findOrFail($id);
+        $taskList = TaskList::where([
+            'id' => $id,
+            'user_id' => auth()->user()->id,
+        ])->get()->first();
 
         return $taskList->delete();
     }
