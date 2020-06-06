@@ -54,7 +54,7 @@ class AuthController extends Controller
 
         } catch (\Exception $exception) {
             return response()->json([
-                'mesage' => $exception->getMessage()
+                'message' => $exception->getMessage()
             ], 400);
         }
     }
@@ -74,7 +74,7 @@ class AuthController extends Controller
 
         } catch (\Exception $exception) {
             return response()->json([
-                'mesage' => $exception->getMessage()
+                'message' => $exception->getMessage()
             ], 400);
         }
     }
@@ -91,7 +91,7 @@ class AuthController extends Controller
 
         } catch (\Exception $exception) {
             return response()->json([
-                'mesage' => $exception->getMessage()
+                'message' => $exception->getMessage()
             ], 400);
         }
     }
