@@ -2,7 +2,10 @@ export default [
     {
         name: 'home',
         path: '/',
-        components: require('./components/Home')
+        components: require('./components/Home'),
+        meta: {
+            auth: true
+        }
     },
     {
         name: 'login',
