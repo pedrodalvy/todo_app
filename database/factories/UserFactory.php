@@ -19,7 +19,8 @@ use Illuminate\Support\Str;
 
 $factory->define(User::class, function (Faker $faker) {
     return [
-        'name' => 'before',
+        'name' => 'Prova Before',
+        'username' => 'before',
         'email' => 'before@before.com',
         'email_verified_at' => now(),
         'password' => bcrypt('before'),
