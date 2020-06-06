@@ -2,94 +2,97 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
+use App\Services\AuthService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
+
 
 class AuthController extends Controller
 {
-    use AuthenticatesUsers;
+    private $authService;
 
     /**
      * Create a new AuthController instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(AuthService $authService)
     {
         $this->middleware('auth:api', ['except' => ['login']]);
+        $this->authService = $authService;
     }
 
     /**
      * Get a JWT via given credentials.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @param Request $request
+     * @return JsonResponse
      */
     public function login(Request $request)
     {
-        $this->validateLogin($request);
+        try {
+            return $this->authService->getAccessToken($request);
 
-        $credentials = $this->credentials($request);
-
-        $token = \JWTAuth::attempt($credentials);
-
-        return $this->responseToken($token);
+        } catch (\Exception $exception) {
+            return response()->json([
+                'mesage' => $exception->getMessage()
+            ], 400);
+        }
     }
 
     /**
      * Get the authenticated User.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return UserResource|JsonResponse
      */
     public function me()
     {
-        return response()->json(auth()->user());
+        try {
+            $me = $this->authService->aboutMe();
+            return new UserResource($me);
+
+        } catch (\Exception $exception) {
+            return response()->json([
+                'mesage' => $exception->getMessage()
+            ], 400);
+        }
     }
 
     /**
      * Log the user out (Invalidate the token).
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function logout()
     {
-        auth()->logout();
+        try {
+            $this->authService->revokeToken();
+            return response()->json([
+                'message' => 'Desconectado com sucesso'
+            ], 200);
 
-        return response()->json(['message' => 'Successfully logged out']);
+        } catch (\Exception $exception) {
+            return response()->json([
+                'mesage' => $exception->getMessage()
+            ], 400);
+        }
     }
 
     /**
      * Refresh a token.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function refresh()
     {
-        return $this->respondWithToken(auth()->refresh());
-    }
+        try {
+            return $this->authService->refreshToken();
 
-    /**
-     * Get the token array structure.
-     *
-     * @param  string $token
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    protected function respondWithToken($token)
-    {
-        return response()->json([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => auth('api')->factory()->getTTL() * 60
-        ]);
-    }
-
-    private function responseToken($token)
-    {
-        return $token ? ['token' => $token] :
-            response()->json([
-                'error' => \Lang::get('auth.failed'),
+        } catch (\Exception $exception) {
+            return response()->json([
+                'mesage' => $exception->getMessage()
             ], 400);
+        }
     }
 }
