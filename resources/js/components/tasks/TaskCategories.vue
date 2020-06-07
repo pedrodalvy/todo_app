@@ -7,13 +7,22 @@
                 <Spinner/>
             </div>
             <div v-else>
+
+                <div class="bg-light p-3" v-if="!taskCategories[0]">
+                    <h5 class="text-center mb-0">Nenhuma Categoria Cadastrada</h5>
+                </div>
+
                 <div class="list-group mb-4">
 
-                    <a :key="taskCategory.id"
-                       class="list-group-item list-group-item-action"
-                       href="#" v-for="taskCategory in taskCategories">
-                        {{taskCategory.name}}
-                    </a>
+                    <div class="card mb-1 border-6px shadow-sm rounded"
+                         :style="{'border-left-color': taskCategory.color}"
+                         v-for="taskCategory in taskCategories">
+                        <div class="card-body p-3">
+                            {{taskCategory.name}}
+                        </div>
+                    </div>
+
+
 
                 </div>
 
