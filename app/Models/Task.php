@@ -9,8 +9,6 @@ class Task extends Model
 {
     use SoftDeletes;
 
-    public const DEFAULT_PER_PAGE = 10;
-
     protected $fillable = [
         'description',
         'start_date',
@@ -21,7 +19,9 @@ class Task extends Model
 
     protected $dates = [
         'start_date',
-        'end_date'
+        'end_date',
+        'completed_at',
+        'created_at',
     ];
 
     public function taskList()
