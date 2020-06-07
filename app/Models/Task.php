@@ -15,6 +15,7 @@ class Task extends Model
         'end_date',
         'task_list_id',
         'task_category_id',
+        'completed',
     ];
 
     protected $dates = [
