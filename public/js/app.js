@@ -2728,8 +2728,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 
 
 
@@ -61294,146 +61292,153 @@ var render = function() {
                       [
                         _c(
                           "table",
-                          { staticClass: "table table-borderless p-0 m-0" },
+                          {
+                            staticClass:
+                              "table table-borderless p-0 m-0 table-responsive-sm"
+                          },
                           [
                             _c("tbody", [
                               _c("tr", { staticClass: "d-flex" }, [
-                                _c("td", { staticClass: "text-left col-5" }, [
-                                  _c(
-                                    "div",
-                                    {
-                                      staticClass:
-                                        "custom-control custom-checkbox"
-                                    },
-                                    [
-                                      _c("input", {
-                                        staticClass: "custom-control-input",
-                                        attrs: {
-                                          id: "check-" + task.id,
-                                          type: "checkbox"
-                                        },
-                                        domProps: {
-                                          checked: task.completed,
-                                          value: task.id
-                                        },
-                                        on: {
-                                          click: function($event) {
-                                            return _vm.checkTask({ task: task })
+                                _c(
+                                  "td",
+                                  { staticClass: "text-left col-md-5" },
+                                  [
+                                    _c(
+                                      "div",
+                                      {
+                                        staticClass:
+                                          "custom-control custom-checkbox"
+                                      },
+                                      [
+                                        _c("input", {
+                                          staticClass: "custom-control-input",
+                                          attrs: {
+                                            id: "check-" + task.id,
+                                            type: "checkbox"
+                                          },
+                                          domProps: {
+                                            checked: task.completed,
+                                            value: task.id
+                                          },
+                                          on: {
+                                            click: function($event) {
+                                              return _vm.checkTask({
+                                                task: task
+                                              })
+                                            }
                                           }
-                                        }
-                                      }),
-                                      _vm._v(" "),
-                                      _c(
-                                        "label",
-                                        {
-                                          staticClass: "custom-control-label",
-                                          attrs: { for: "check-" + task.id }
-                                        },
-                                        [
-                                          _vm._v(
-                                            "\n                                        " +
-                                              _vm._s(task.description) +
-                                              "\n                                    "
-                                          )
-                                        ]
-                                      )
-                                    ]
-                                  )
-                                ]),
-                                _vm._v(" "),
-                                _c("td", { staticClass: "text-left col-3" }, [
-                                  _c(
-                                    "small",
-                                    {
-                                      directives: [
-                                        {
-                                          name: "show",
-                                          rawName: "v-show",
-                                          value: task.start_date,
-                                          expression: "task.start_date"
-                                        }
+                                        }),
+                                        _vm._v(" "),
+                                        _c(
+                                          "label",
+                                          {
+                                            staticClass: "custom-control-label",
+                                            attrs: { for: "check-" + task.id }
+                                          },
+                                          [
+                                            _vm._v(
+                                              "\n                                        " +
+                                                _vm._s(task.description) +
+                                                "\n                                    "
+                                            )
+                                          ]
+                                        )
                                       ]
-                                    },
-                                    [
-                                      _vm._v(
-                                        "\n                                    Previsão de Início:" +
-                                          _vm._s(
-                                            _vm
-                                              .moment(task.start_date)
-                                              .format("DD/MM/YYYY [as] HH:mm")
-                                          ) +
-                                          "\n                                "
-                                      )
-                                    ]
-                                  )
-                                ]),
-                                _vm._v(" "),
-                                _c("td", { staticClass: "text-left col-3" }, [
-                                  _c(
-                                    "small",
-                                    {
-                                      directives: [
-                                        {
-                                          name: "show",
-                                          rawName: "v-show",
-                                          value: task.end_date,
-                                          expression: "task.end_date"
-                                        }
-                                      ]
-                                    },
-                                    [
-                                      _vm._v(
-                                        "\n                                    Previsão de Conclusão: " +
-                                          _vm._s(
-                                            _vm
-                                              .moment(task.end_date)
-                                              .format("DD/MM/YYYY [as] HH:mm")
-                                          ) +
-                                          "\n                                "
-                                      )
-                                    ]
-                                  )
-                                ]),
+                                    )
+                                  ]
+                                ),
                                 _vm._v(" "),
                                 _c(
                                   "td",
                                   {
                                     staticClass:
-                                      "d-flex align-items-end flex-column col-1"
+                                      "text-left col-3 d-none d-md-block "
                                   },
                                   [
                                     _c(
-                                      "div",
+                                      "small",
                                       {
-                                        staticClass: "btn-group btn-group-sm",
-                                        attrs: {
-                                          "aria-label": "...",
-                                          role: "group"
+                                        directives: [
+                                          {
+                                            name: "show",
+                                            rawName: "v-show",
+                                            value: task.start_date,
+                                            expression: "task.start_date"
+                                          }
+                                        ]
+                                      },
+                                      [
+                                        _vm._v(
+                                          "\n                                    Previsão de Início:" +
+                                            _vm._s(
+                                              _vm
+                                                .moment(task.start_date)
+                                                .format("DD/MM/YYYY [as] HH:mm")
+                                            ) +
+                                            "\n                                "
+                                        )
+                                      ]
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "td",
+                                  {
+                                    staticClass:
+                                      "text-left col-3 d-none d-md-block"
+                                  },
+                                  [
+                                    _c(
+                                      "small",
+                                      {
+                                        directives: [
+                                          {
+                                            name: "show",
+                                            rawName: "v-show",
+                                            value: task.end_date,
+                                            expression: "task.end_date"
+                                          }
+                                        ]
+                                      },
+                                      [
+                                        _vm._v(
+                                          "\n                                    Previsão de Conclusão: " +
+                                            _vm._s(
+                                              _vm
+                                                .moment(task.end_date)
+                                                .format("DD/MM/YYYY [as] HH:mm")
+                                            ) +
+                                            "\n                                "
+                                        )
+                                      ]
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "td",
+                                  {
+                                    staticClass:
+                                      " align-items-end col-md-1 text-right"
+                                  },
+                                  [
+                                    _c(
+                                      "button",
+                                      {
+                                        staticClass: "btn btn-danger",
+                                        attrs: { type: "button" },
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.deleteTask(task.id)
+                                          }
                                         }
                                       },
                                       [
-                                        _c(
-                                          "button",
-                                          {
-                                            staticClass: "btn btn-danger",
-                                            attrs: {
-                                              type: "button",
-                                              "data-target": "#TaskmodalEdit",
-                                              "data-toggle": "modal"
-                                            },
-                                            on: {
-                                              click: function($event) {
-                                                return _vm.deleteTask(task.id)
-                                              }
-                                            }
-                                          },
-                                          [
-                                            _c("i", {
-                                              staticClass: "fa fa-trash",
-                                              attrs: { "aria-hidden": "true" }
-                                            })
-                                          ]
-                                        )
+                                        _c("i", {
+                                          staticClass: "fa fa-trash",
+                                          attrs: { "aria-hidden": "true" }
+                                        })
                                       ]
                                     )
                                   ]

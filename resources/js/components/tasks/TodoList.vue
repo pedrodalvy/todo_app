@@ -31,10 +31,10 @@
                      v-for="task in tasks">
                     <div :class="[task.completed ? 'taskCompleted bg-light' : '']"
                          class="card-body p-1">
-                        <table class="table table-borderless p-0 m-0">
+                        <table class="table table-borderless p-0 m-0 table-responsive-sm">
                             <tbody>
                             <tr class="d-flex">
-                                <td class="text-left col-5">
+                                <td class="text-left col-md-5">
                                     <div class="custom-control custom-checkbox">
                                         <input :checked="task.completed" :id="`check-${task.id}`"
                                                :value="task.id"
@@ -48,22 +48,20 @@
                                         </label>
                                     </div>
                                 </td>
-                                <td class="text-left col-3">
+                                <td class="text-left col-3 d-none d-md-block ">
                                     <small v-show="task.start_date">
                                         Previsão de Início:{{moment(task.start_date).format('DD/MM/YYYY [as] HH:mm')}}
                                     </small>
                                 </td>
-                                <td class="text-left col-3">
+                                <td class="text-left col-3 d-none d-md-block">
                                     <small v-show="task.end_date">
                                         Previsão de Conclusão: {{moment(task.end_date).format('DD/MM/YYYY [as] HH:mm')}}
                                     </small>
                                 </td>
-                                <td class="d-flex align-items-end flex-column col-1">
-                                    <div aria-label="..." class="btn-group btn-group-sm" role="group">
-                                        <button class="btn btn-danger" type="button" @click="deleteTask(task.id)"  data-target="#TaskmodalEdit" data-toggle="modal">
-                                            <i aria-hidden="true" class="fa fa-trash"></i>
-                                        </button>
-                                    </div>
+                                <td class=" align-items-end col-md-1 text-right">
+                                    <button class="btn btn-danger" type="button" @click="deleteTask(task.id)">
+                                        <i aria-hidden="true" class="fa fa-trash"></i>
+                                    </button>
                                 </td>
                             </tr>
                             </tbody>
