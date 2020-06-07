@@ -1949,7 +1949,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _tasks_FormTaskList__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./tasks/FormTaskList */ "./resources/js/components/tasks/FormTaskList.vue");
 /* harmony import */ var vue_simple_spinner__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vue-simple-spinner */ "./node_modules/vue-simple-spinner/dist/vue-simple-spinner.js");
 /* harmony import */ var vue_simple_spinner__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(vue_simple_spinner__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
 //
 //
 //
@@ -1981,7 +1980,30 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -1994,7 +2016,8 @@ __webpack_require__.r(__webpack_exports__);
       taskLists: [],
       showForm: false,
       taskList: null,
-      showSpinner: true
+      showSpinner: true,
+      page: {}
     };
   },
   components: {
@@ -2002,18 +2025,26 @@ __webpack_require__.r(__webpack_exports__);
     Spinner: vue_simple_spinner__WEBPACK_IMPORTED_MODULE_4___default.a
   },
   created: function created() {
-    var _this = this;
-
-    var header = _services_helper__WEBPACK_IMPORTED_MODULE_2__["default"].getHeader();
-    axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("".concat(_services_config__WEBPACK_IMPORTED_MODULE_1__["default"].API_URL, "/v1/task_lists"), header).then(function (response) {
-      _services_helper__WEBPACK_IMPORTED_MODULE_2__["default"].setToken(response.headers.authorization);
-      _this.taskLists = response.data.data;
-      _this.showSpinner = false;
-    })["catch"](function (error) {
-      _services_helper__WEBPACK_IMPORTED_MODULE_2__["default"].setToken(error.response.headers.authorization);
-    });
+    var apiLink = "".concat(_services_config__WEBPACK_IMPORTED_MODULE_1__["default"].API_URL, "/v1/task_lists");
+    this.getTaskLists(apiLink);
   },
   methods: {
+    getTaskLists: function getTaskLists(apiLink) {
+      var _this = this;
+
+      var header = _services_helper__WEBPACK_IMPORTED_MODULE_2__["default"].getHeader();
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(apiLink, header).then(function (response) {
+        _services_helper__WEBPACK_IMPORTED_MODULE_2__["default"].setToken(response.headers.authorization);
+        _this.taskLists = response.data.data;
+        _this.page = {
+          links: response.data.links,
+          meta: response.data.meta
+        };
+        _this.showSpinner = false;
+      })["catch"](function (error) {
+        _services_helper__WEBPACK_IMPORTED_MODULE_2__["default"].setToken(error.response.headers.authorization);
+      });
+    },
     createTaskList: function createTaskList(taskList) {
       var _this2 = this;
 
@@ -2477,6 +2508,28 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2492,22 +2545,31 @@ __webpack_require__.r(__webpack_exports__);
     return {
       showSpinner: true,
       taskCategories: [],
-      showForm: false
+      showForm: false,
+      page: {}
     };
   },
   created: function created() {
-    var _this = this;
-
-    var header = _services_helper__WEBPACK_IMPORTED_MODULE_2__["default"].getHeader();
-    axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("".concat(_services_config__WEBPACK_IMPORTED_MODULE_1__["default"].API_URL, "/v1/task_categories"), header).then(function (response) {
-      _services_helper__WEBPACK_IMPORTED_MODULE_2__["default"].setToken(response.headers.authorization);
-      _this.taskCategories = response.data.data;
-      _this.showSpinner = false;
-    })["catch"](function (error) {
-      _services_helper__WEBPACK_IMPORTED_MODULE_2__["default"].setToken(error.response.headers.authorization);
-    });
+    var apiLink = "".concat(_services_config__WEBPACK_IMPORTED_MODULE_1__["default"].API_URL, "/v1/task_categories");
+    this.getCategories(apiLink);
   },
   methods: {
+    getCategories: function getCategories(apiLink) {
+      var _this = this;
+
+      var header = _services_helper__WEBPACK_IMPORTED_MODULE_2__["default"].getHeader();
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(apiLink, header).then(function (response) {
+        _services_helper__WEBPACK_IMPORTED_MODULE_2__["default"].setToken(response.headers.authorization);
+        _this.taskCategories = response.data.data;
+        _this.page = {
+          links: response.data.links,
+          meta: response.data.meta
+        };
+        _this.showSpinner = false;
+      })["catch"](function (error) {
+        _services_helper__WEBPACK_IMPORTED_MODULE_2__["default"].setToken(error.response.headers.authorization);
+      });
+    },
     createTaskCategory: function createTaskCategory(taskCategory) {
       var _this2 = this;
 
@@ -38926,82 +38988,146 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "card" }, [
-    _c(
-      "div",
-      { staticClass: "card-body mb-4" },
-      [
-        _c("h5", { staticClass: "card-title" }, [
-          _vm._v("Todas as Listas de Tarefas")
-        ]),
-        _vm._v(" "),
-        _vm.showSpinner ? _c("Spinner") : _vm._e(),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "list-group mb-4" },
-          _vm._l(_vm.taskLists, function(taskList) {
-            return _c(
-              "a",
-              {
-                key: taskList.id,
-                staticClass: "list-group-item list-group-item-action",
-                attrs: { href: "javascript:void(0);" },
-                on: {
-                  click: function($event) {
-                    return _vm.todoList(taskList.id)
-                  }
-                }
-              },
-              [
-                _vm._v(
-                  "\n                " +
-                    _vm._s(taskList.name) +
-                    "\n            "
-                )
-              ]
-            )
-          }),
-          0
-        ),
-        _vm._v(" "),
-        !_vm.showForm
-          ? _c("div", [
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-primary float-right mb-4 mt-0",
-                  on: {
-                    click: function($event) {
-                      _vm.showForm = !_vm.showForm
-                    }
-                  }
-                },
-                [
-                  _c("i", { staticClass: "fa fa-plus mr-2" }),
-                  _vm._v(" "),
-                  _c("span", [_vm._v("Criar Lista")])
-                ]
-              )
-            ])
-          : _vm._e(),
-        _vm._v(" "),
-        _vm.showForm
-          ? _c(
+    _c("div", { staticClass: "card-body mb-4" }, [
+      _c("h5", { staticClass: "card-title" }, [
+        _vm._v("Todas as Listas de Tarefas")
+      ]),
+      _vm._v(" "),
+      _vm.showSpinner
+        ? _c("div", [_c("Spinner")], 1)
+        : _c("div", [
+            _c(
               "div",
+              { staticClass: "list-group mb-4" },
               [
-                _c("FormTaskList", {
-                  on: {
-                    createTaskList: _vm.createTaskList,
-                    hideForm: _vm.hideForm
-                  }
-                })
+                _vm._l(_vm.taskLists, function(taskList) {
+                  return _c(
+                    "a",
+                    {
+                      key: taskList.id,
+                      staticClass: "list-group-item list-group-item-action",
+                      attrs: { href: "javascript:void(0);" },
+                      on: {
+                        click: function($event) {
+                          return _vm.todoList(taskList.id)
+                        }
+                      }
+                    },
+                    [
+                      _vm._v(
+                        "\n                    " +
+                          _vm._s(taskList.name) +
+                          "\n                "
+                      )
+                    ]
+                  )
+                }),
+                _vm._v(" "),
+                _c(
+                  "nav",
+                  {
+                    staticClass: "mt-2",
+                    attrs: { "aria-label": "Page navigation" }
+                  },
+                  [
+                    _c("ul", { staticClass: "pagination" }, [
+                      _vm.page.links.prev
+                        ? _c("li", { staticClass: "page-item" }, [
+                            _c(
+                              "a",
+                              {
+                                staticClass: "page-link",
+                                attrs: { href: "javascript:void(0);" },
+                                on: {
+                                  click: function($event) {
+                                    _vm.getTaskLists(_vm.page.links.prev)
+                                    _vm.showSpinner = true
+                                  }
+                                }
+                              },
+                              [
+                                _c("i", {
+                                  staticClass: "fa fa-angle-left mr-2",
+                                  attrs: { "aria-hidden": "true" }
+                                }),
+                                _vm._v(
+                                  "\n                                Página anterior\n                            "
+                                )
+                              ]
+                            )
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.page.links.next
+                        ? _c("li", { staticClass: "page-item" }, [
+                            _c(
+                              "a",
+                              {
+                                staticClass: "page-link",
+                                attrs: { href: "javascript:void(0);" },
+                                on: {
+                                  click: function($event) {
+                                    _vm.getTaskLists(_vm.page.links.next)
+                                    _vm.showSpinner = true
+                                  }
+                                }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                                Próxima página\n                                "
+                                ),
+                                _c("i", {
+                                  staticClass: "fa fa-angle-right ml-2",
+                                  attrs: { "aria-hidden": "true" }
+                                })
+                              ]
+                            )
+                          ])
+                        : _vm._e()
+                    ])
+                  ]
+                )
               ],
-              1
-            )
-          : _vm._e()
-      ],
-      1
-    )
+              2
+            ),
+            _vm._v(" "),
+            !_vm.showForm
+              ? _c("div", [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-primary float-right mb-4 mt-0",
+                      on: {
+                        click: function($event) {
+                          _vm.showForm = !_vm.showForm
+                        }
+                      }
+                    },
+                    [
+                      _c("i", { staticClass: "fa fa-plus mr-2" }),
+                      _vm._v(" "),
+                      _c("span", [_vm._v("Criar Lista")])
+                    ]
+                  )
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.showForm
+              ? _c(
+                  "div",
+                  [
+                    _c("FormTaskList", {
+                      on: {
+                        createTaskList: _vm.createTaskList,
+                        hideForm: _vm.hideForm
+                      }
+                    })
+                  ],
+                  1
+                )
+              : _vm._e()
+          ])
+    ])
   ])
 }
 var staticRenderFns = []
@@ -39721,77 +39847,137 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "card" }, [
-    _c(
-      "div",
-      { staticClass: "card-body mb-4" },
-      [
-        _c("h5", { staticClass: "card-title" }, [
-          _vm._v("Todas as Categorias")
-        ]),
-        _vm._v(" "),
-        _vm.showSpinner ? _c("Spinner") : _vm._e(),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "list-group mb-4" },
-          _vm._l(_vm.taskCategories, function(taskCategory) {
-            return _c(
-              "a",
+    _c("div", { staticClass: "card-body mb-4" }, [
+      _c("h5", { staticClass: "card-title" }, [_vm._v("Todas as Categorias")]),
+      _vm._v(" "),
+      _vm.showSpinner
+        ? _c("div", [_c("Spinner")], 1)
+        : _c("div", [
+            _c(
+              "div",
+              { staticClass: "list-group mb-4" },
+              _vm._l(_vm.taskCategories, function(taskCategory) {
+                return _c(
+                  "a",
+                  {
+                    key: taskCategory.id,
+                    staticClass: "list-group-item list-group-item-action",
+                    attrs: { href: "#" }
+                  },
+                  [
+                    _vm._v(
+                      "\n                    " +
+                        _vm._s(taskCategory.name) +
+                        "\n                "
+                    )
+                  ]
+                )
+              }),
+              0
+            ),
+            _vm._v(" "),
+            _c(
+              "nav",
               {
-                key: taskCategory.id,
-                staticClass: "list-group-item list-group-item-action",
-                attrs: { href: "#" }
+                staticClass: "mt-2",
+                attrs: { "aria-label": "Page navigation" }
               },
               [
-                _vm._v(
-                  "\n                " +
-                    _vm._s(taskCategory.name) +
-                    "\n            "
-                )
-              ]
-            )
-          }),
-          0
-        ),
-        _vm._v(" "),
-        !_vm.showForm
-          ? _c("div", [
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-primary float-right mb-4 mt-0",
-                  on: {
-                    click: function($event) {
-                      _vm.showForm = !_vm.showForm
-                    }
-                  }
-                },
-                [
-                  _c("i", { staticClass: "fa fa-plus mr-2" }),
+                _c("ul", { staticClass: "pagination" }, [
+                  _vm.page.links.prev
+                    ? _c("li", { staticClass: "page-item" }, [
+                        _c(
+                          "a",
+                          {
+                            staticClass: "page-link",
+                            attrs: { href: "javascript:void(0);" },
+                            on: {
+                              click: function($event) {
+                                _vm.getCategories(_vm.page.links.prev)
+                                _vm.showSpinner = true
+                              }
+                            }
+                          },
+                          [
+                            _c("i", {
+                              staticClass: "fa fa-angle-left mr-2",
+                              attrs: { "aria-hidden": "true" }
+                            }),
+                            _vm._v(
+                              "\n                            Página anterior\n                        "
+                            )
+                          ]
+                        )
+                      ])
+                    : _vm._e(),
                   _vm._v(" "),
-                  _c("span", [_vm._v("Criar Categoria")])
-                ]
-              )
-            ])
-          : _vm._e(),
-        _vm._v(" "),
-        _vm.showForm
-          ? _c(
-              "div",
-              [
-                _c("FormTaskCategories", {
-                  on: {
-                    createTaskCategory: _vm.createTaskCategory,
-                    hideForm: _vm.hideForm
-                  }
-                })
-              ],
-              1
-            )
-          : _vm._e()
-      ],
-      1
-    )
+                  _vm.page.links.next
+                    ? _c("li", { staticClass: "page-item" }, [
+                        _c(
+                          "a",
+                          {
+                            staticClass: "page-link",
+                            attrs: { href: "javascript:void(0);" },
+                            on: {
+                              click: function($event) {
+                                _vm.getCategories(_vm.page.links.next)
+                                _vm.showSpinner = true
+                              }
+                            }
+                          },
+                          [
+                            _vm._v(
+                              "\n                            Próxima página\n                            "
+                            ),
+                            _c("i", {
+                              staticClass: "fa fa-angle-right ml-2",
+                              attrs: { "aria-hidden": "true" }
+                            })
+                          ]
+                        )
+                      ])
+                    : _vm._e()
+                ])
+              ]
+            ),
+            _vm._v(" "),
+            !_vm.showForm
+              ? _c("div", [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-primary float-right mb-4 mt-0",
+                      on: {
+                        click: function($event) {
+                          _vm.showForm = !_vm.showForm
+                        }
+                      }
+                    },
+                    [
+                      _c("i", { staticClass: "fa fa-plus mr-2" }),
+                      _vm._v(" "),
+                      _c("span", [_vm._v("Criar Categoria")])
+                    ]
+                  )
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.showForm
+              ? _c(
+                  "div",
+                  [
+                    _c("FormTaskCategories", {
+                      on: {
+                        createTaskCategory: _vm.createTaskCategory,
+                        hideForm: _vm.hideForm
+                      }
+                    })
+                  ],
+                  1
+                )
+              : _vm._e()
+          ])
+    ])
   ])
 }
 var staticRenderFns = []

@@ -4,26 +4,50 @@
         <div class="card-body mb-4">
             <h5 class="card-title">Todas as Listas de Tarefas</h5>
 
-            <Spinner v-if="showSpinner" />
-            <div class="list-group mb-4">
-                <a class="list-group-item list-group-item-action"
-                   href="javascript:void(0);" v-for="taskList in taskLists" :key="taskList.id" @click="todoList(taskList.id)">
-                    {{taskList.name}}
-                </a>
+            <div v-if="showSpinner">
+                <Spinner/>
             </div>
 
-            <div v-if="!showForm">
-                <button @click="showForm = !showForm"
-                        class="btn btn-primary float-right mb-4 mt-0">
-                    <i class="fa fa-plus mr-2"></i>
-                    <span>Criar Lista</span>
-                </button>
-            </div>
 
-            <div v-if="showForm">
-                <FormTaskList
-                        @createTaskList="createTaskList"
-                        @hideForm="hideForm"/>
+            <div v-else>
+                <div class="list-group mb-4">
+                    <a :key="taskList.id"
+                       @click="todoList(taskList.id)" class="list-group-item list-group-item-action"
+                       href="javascript:void(0);"
+                       v-for="taskList in taskLists">
+                        {{taskList.name}}
+                    </a>
+                    <nav aria-label="Page navigation" class="mt-2">
+                        <ul class="pagination">
+                            <li class="page-item" v-if="page.links.prev">
+                                <a @click="getTaskLists(page.links.prev); showSpinner = true" class="page-link" href="javascript:void(0);">
+                                    <i aria-hidden="true" class="fa fa-angle-left mr-2"></i>
+                                    Página anterior
+                                </a>
+                            </li>
+                            <li class="page-item" v-if="page.links.next">
+                                <a @click="getTaskLists(page.links.next); showSpinner = true" class="page-link" href="javascript:void(0);">
+                                    Próxima página
+                                    <i aria-hidden="true" class="fa fa-angle-right ml-2"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+
+                <div v-if="!showForm">
+                    <button @click="showForm = !showForm"
+                            class="btn btn-primary float-right mb-4 mt-0">
+                        <i class="fa fa-plus mr-2"></i>
+                        <span>Criar Lista</span>
+                    </button>
+                </div>
+
+                <div v-if="showForm">
+                    <FormTaskList
+                            @createTaskList="createTaskList"
+                            @hideForm="hideForm"/>
+                </div>
             </div>
         </div>
     </div>
@@ -35,7 +59,6 @@
     import helper from "../services/helper";
     import FormTaskList from "./tasks/FormTaskList";
     import Spinner from 'vue-simple-spinner'
-    import router from 'vue-router';
 
     export default {
         name: "Home",
@@ -45,6 +68,7 @@
                 showForm: false,
                 taskList: null,
                 showSpinner: true,
+                page: {},
             }
         },
         components: {
@@ -52,24 +76,29 @@
             Spinner,
         },
         created() {
-            const header = helper.getHeader();
-
-            axios.get(`${CONFIG.API_URL}/v1/task_lists`, header)
-                .then(response => {
-                    helper.setToken(response.headers.authorization);
-                    this.taskLists = response.data.data;
-                    this.showSpinner = false;
-                })
-                .catch(error => {
-                    helper.setToken(error.response.headers.authorization);
-                })
+            const apiLink = `${CONFIG.API_URL}/v1/task_lists`;
+            this.getTaskLists(apiLink);
         },
         methods: {
+            getTaskLists(apiLink) {
+                const header = helper.getHeader();
+                axios.get(apiLink, header)
+                    .then(response => {
+                        helper.setToken(response.headers.authorization);
+                        this.taskLists = response.data.data;
+                        this.page = {links: response.data.links, meta: response.data.meta};
+
+                        this.showSpinner = false;
+                    })
+                    .catch(error => {
+                        helper.setToken(error.response.headers.authorization);
+                    })
+            },
             createTaskList(taskList) {
                 this.showForm = false;
                 const header = helper.getHeader();
                 axios.post(`${CONFIG.API_URL}/v1/task_lists`, taskList, header)
-                    .then( response => {
+                    .then(response => {
                         helper.setToken(response.headers.authorization);
                         this.taskLists.push(response.data.data);
                     })
@@ -81,7 +110,7 @@
                 this.showForm = showForm;
             },
             todoList(key) {
-                this.$router.push({ name: 'todo', params: {task_list: key} })
+                this.$router.push({name: 'todo', params: {task_list: key}})
             }
 
         }
