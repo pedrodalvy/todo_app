@@ -6,3 +6,15 @@
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
+
+.border-3px {
+  border-left-width: 3px;
+}
+
+.border-6px {
+  border-left-width: 6px;
+}
+
+.pointer {
+  cursor: pointer;
+}

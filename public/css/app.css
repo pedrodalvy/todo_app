@@ -10928,5 +10928,17 @@ a.text-dark:focus {
   }
 }
 
+.border-3px {
+  border-left-width: 3px;
+}
+
+.border-6px {
+  border-left-width: 6px;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
 
 /*# sourceMappingURL=app.css.map*/
