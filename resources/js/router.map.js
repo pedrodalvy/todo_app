@@ -16,12 +16,20 @@ export default [
         }
     },
     {
+        name: 'todo',
+        path: '/todo_list/:task_list',
+        components: require('./components/tasks/TodoList'),
+        meta: {
+            auth: true
+        }
+    },
+    {
         name: 'login',
         path: '/login',
         components: require('./components/Login')
     },
     {
         path: '*',
-        redirect: '/login'
+        redirect: '/'
     }
 ]

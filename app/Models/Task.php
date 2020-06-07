@@ -24,12 +24,12 @@ class Task extends Model
         'end_date'
     ];
 
-    public function task()
+    public function taskList()
     {
         return $this->belongsTo(TaskList::class);
     }
 
-    public function category()
+    public function taskCategory()
     {
         return $this->belongsTo(TaskCategory::class);
     }
