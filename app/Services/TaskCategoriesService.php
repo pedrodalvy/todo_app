@@ -14,7 +14,8 @@ class TaskCategoriesService
     {
         $user = auth()->user();
 
-        return TaskCategory::where('user_id', $user->id)->get();
+        return TaskCategory::where('user_id', $user->id)
+            ->paginate(TaskCategory::DEFAULT_PER_PAGE);
     }
 
     /**

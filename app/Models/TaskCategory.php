@@ -9,6 +9,8 @@ class TaskCategory extends Model
 {
     use SoftDeletes;
 
+    public const DEFAULT_PER_PAGE = 10;
+
     protected $fillable = [
         'name',
         'user_id'
