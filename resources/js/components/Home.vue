@@ -10,13 +10,21 @@
 
 
             <div v-else>
+
+                <div class="bg-light p-3" v-if="!taskLists[0]">
+                    <h5 class="text-center mb-0">Nenhuma Lista Cadastrada</h5>
+                </div>
+
                 <div class="list-group mb-4">
-                    <a :key="taskList.id"
-                       @click="todoList(taskList.id)" class="list-group-item list-group-item-action"
-                       href="javascript:void(0);"
-                       v-for="taskList in taskLists">
-                        {{taskList.name}}
-                    </a>
+                    <div class="card mb-1 shadow-sm rounded pointer"
+                         @click="todoList(taskList.id)"
+                         :key="taskList.id"
+                         v-for="taskList in taskLists">
+                        <div class="card-body p-3">
+                            {{taskList.name}}
+                        </div>
+                    </div>
+
                     <nav aria-label="Page navigation" class="mt-2">
                         <ul class="pagination">
                             <li class="page-item" v-if="page.links.prev">
