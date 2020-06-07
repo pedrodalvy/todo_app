@@ -7,7 +7,7 @@
             <Spinner v-if="showSpinner" />
             <div class="list-group mb-4">
                 <a class="list-group-item list-group-item-action"
-                   href="#" v-for="taskList in taskLists" :key="taskList.id">
+                   href="javascript:void(0);" v-for="taskList in taskLists" :key="taskList.id" @click="todoList(taskList.id)">
                     {{taskList.name}}
                 </a>
             </div>
@@ -35,6 +35,7 @@
     import helper from "../services/helper";
     import FormTaskList from "./tasks/FormTaskList";
     import Spinner from 'vue-simple-spinner'
+    import router from 'vue-router';
 
     export default {
         name: "Home",
@@ -59,6 +60,9 @@
                     this.taskLists = response.data.data;
                     this.showSpinner = false;
                 })
+                .catch(error => {
+                    helper.setToken(error.response.headers.authorization);
+                })
         },
         methods: {
             createTaskList(taskList) {
@@ -69,9 +73,15 @@
                         helper.setToken(response.headers.authorization);
                         this.taskLists.push(response.data.data);
                     })
+                    .catch(error => {
+                        helper.setToken(error.response.headers.authorization);
+                    })
             },
             hideForm(showForm) {
                 this.showForm = showForm;
+            },
+            todoList(key) {
+                this.$router.push({ name: 'todo', params: {task_list: key} })
             }
 
         }

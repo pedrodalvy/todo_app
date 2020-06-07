@@ -5,22 +5,23 @@
                 <Spinner/>
             </div>
             <div v-else>
-                <h5 class="card-title">Listas de Tarefas: <span
-                        class="font-weight-bold">{{ tasks[0].task_list.name }}</span></h5>
+                <h5 class="card-title">Listas de Tarefas:
+                    <span class="font-weight-bold">
+                        {{taskListName}}
+                    </span>
+                </h5>
 
                 <ul class="list-group">
-                    <li class="list-group-item">Dapibus ac facilisis in</li>
-                    <li class="list-group-item">Morbi leo risus</li>
-                    <li class="list-group-item">Porta ac consectetur ac</li>
-                    <li class="list-group-item">Vestibulum at eros</li>
+                    <li :key="task.id" class="list-group-item" v-for="task in tasks">{{task.description}}</li>
                 </ul>
 
                 <!-- Button trigger modal -->
-                <button type="button" class="btn btn-primary mt-4" data-toggle="modal" data-target="#Taskmodal">
+                <button class="btn btn-primary mt-4" data-target="#Taskmodal" data-toggle="modal" type="button">
                     Nova Tarefa
                 </button>
 
-                <FormTask />
+                <FormTask @createTask="createTask"
+                          :taskCategories="taskCategories"/>
             </div>
 
         </div>
@@ -46,22 +47,70 @@
                 showSpinner: true,
                 taskListId: this.$route.params.task_list,
                 tasks: [],
+                taskListName: '',
+                taskCategories: [],
             }
         },
         created() {
             const header = helper.getHeader();
             const taskListId = this.taskListId;
+            const getTaskListData = this.getTaskListData;
 
             axios.get(`${CONFIG.API_URL}/v1/tasks/by_task_list/${taskListId}`, header)
                 .then(response => {
                     helper.setToken(response.headers.authorization);
-                    console.log(response.data.data)
+                    console.log(response.data.data);
                     this.tasks = response.data.data;
+
+                    if (!this.tasks[0]) {
+                        getTaskListData()
+                    } else {
+                        this.taskListName = this.tasks[0].task_list.name
+                    }
+                })
+                .catch(error => {
+                    this.showSpinner = false;
+                    helper.setToken(error.response.headers.authorization);
+                });
+
+            axios.get(`${CONFIG.API_URL}/v1/task_categories`, header)
+                .then(response => {
+                    helper.setToken(response.headers.authorization);
+                    this.taskCategories = response.data.data;
                     this.showSpinner = false;
                 })
+                .catch(error => {
+                    this.showSpinner = false;
+                    helper.setToken(error.response.headers.authorization);
+                });
         },
         methods: {
+            createTask(task) {
+                const header = helper.getHeader();
+                task.task_list_id = this.taskListId;
 
+                axios.post(`${CONFIG.API_URL}/v1/tasks`, task, header)
+                    .then(response => {
+                        helper.setToken(response.headers.authorization);
+                        this.tasks.push(response.data.data);
+                    })
+                    .catch(error => {
+                        helper.setToken(error.response.headers.authorization);
+                    })
+            },
+            getTaskListData() {
+                const header = helper.getHeader();
+                const taskListId = this.taskListId;
+
+                axios.get(`${CONFIG.API_URL}/v1/task_lists/${taskListId}`, header)
+                    .then(response => {
+                        helper.setToken(response.headers.authorization);
+                        this.taskListName = response.data.data.name;
+                    })
+                    .catch(error => {
+                        helper.setToken(error.response.headers.authorization);
+                    })
+            }
         }
     }
 </script>

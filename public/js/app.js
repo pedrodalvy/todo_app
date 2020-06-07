@@ -1949,6 +1949,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _tasks_FormTaskList__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./tasks/FormTaskList */ "./resources/js/components/tasks/FormTaskList.vue");
 /* harmony import */ var vue_simple_spinner__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vue-simple-spinner */ "./node_modules/vue-simple-spinner/dist/vue-simple-spinner.js");
 /* harmony import */ var vue_simple_spinner__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(vue_simple_spinner__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
 //
 //
 //
@@ -1980,6 +1981,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 
 
 
@@ -2007,6 +2009,8 @@ __webpack_require__.r(__webpack_exports__);
       _services_helper__WEBPACK_IMPORTED_MODULE_2__["default"].setToken(response.headers.authorization);
       _this.taskLists = response.data.data;
       _this.showSpinner = false;
+    })["catch"](function (error) {
+      _services_helper__WEBPACK_IMPORTED_MODULE_2__["default"].setToken(error.response.headers.authorization);
     });
   },
   methods: {
@@ -2019,10 +2023,20 @@ __webpack_require__.r(__webpack_exports__);
         _services_helper__WEBPACK_IMPORTED_MODULE_2__["default"].setToken(response.headers.authorization);
 
         _this2.taskLists.push(response.data.data);
+      })["catch"](function (error) {
+        _services_helper__WEBPACK_IMPORTED_MODULE_2__["default"].setToken(error.response.headers.authorization);
       });
     },
     hideForm: function hideForm(showForm) {
       this.showForm = showForm;
+    },
+    todoList: function todoList(key) {
+      this.$router.push({
+        name: 'todo',
+        params: {
+          task_list: key
+        }
+      });
     }
   }
 });
@@ -2258,30 +2272,41 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
+var task = {
+  task_category_id: '',
+  description: '',
+  end_date: '',
+  start_date: ''
+};
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "FormTask",
+  props: ['taskCategories'],
   data: function data() {
     return {
       task: {
         task_category_id: '',
         description: '',
         end_date: '',
-        start_date: '',
-        task_list_id: ''
+        start_date: ''
       }
     };
   },
   mounted: function mounted() {
+    var _this = this;
+
     $(this.$refs.modal).on('hidden.bs.modal', function () {
-      console.log('ok');
+      _this.task = {
+        task_category_id: '',
+        description: '',
+        end_date: '',
+        start_date: ''
+      };
     });
   },
   methods: {
     createTask: function createTask() {
-      console.log(this.task);
+      this.$emit('createTask', this.task);
+      $('#Taskmodal').modal('toggle');
     }
   }
 });
@@ -2478,6 +2503,8 @@ __webpack_require__.r(__webpack_exports__);
       _services_helper__WEBPACK_IMPORTED_MODULE_2__["default"].setToken(response.headers.authorization);
       _this.taskCategories = response.data.data;
       _this.showSpinner = false;
+    })["catch"](function (error) {
+      _services_helper__WEBPACK_IMPORTED_MODULE_2__["default"].setToken(error.response.headers.authorization);
     });
   },
   methods: {
@@ -2490,6 +2517,8 @@ __webpack_require__.r(__webpack_exports__);
         _services_helper__WEBPACK_IMPORTED_MODULE_2__["default"].setToken(response.headers.authorization);
 
         _this2.taskCategories.push(response.data.data);
+      })["catch"](function (error) {
+        _services_helper__WEBPACK_IMPORTED_MODULE_2__["default"].setToken(error.response.headers.authorization);
       });
     },
     hideForm: function hideForm(showForm) {
@@ -2546,6 +2575,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 
@@ -2561,7 +2591,9 @@ __webpack_require__.r(__webpack_exports__);
     return {
       showSpinner: true,
       taskListId: this.$route.params.task_list,
-      tasks: []
+      tasks: [],
+      taskListName: '',
+      taskCategories: []
     };
   },
   created: function created() {
@@ -2569,14 +2601,57 @@ __webpack_require__.r(__webpack_exports__);
 
     var header = _services_helper__WEBPACK_IMPORTED_MODULE_2__["default"].getHeader();
     var taskListId = this.taskListId;
+    var getTaskListData = this.getTaskListData;
     axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("".concat(_services_config__WEBPACK_IMPORTED_MODULE_1__["default"].API_URL, "/v1/tasks/by_task_list/").concat(taskListId), header).then(function (response) {
       _services_helper__WEBPACK_IMPORTED_MODULE_2__["default"].setToken(response.headers.authorization);
       console.log(response.data.data);
       _this.tasks = response.data.data;
+
+      if (!_this.tasks[0]) {
+        getTaskListData();
+      } else {
+        _this.taskListName = _this.tasks[0].task_list.name;
+      }
+    })["catch"](function (error) {
       _this.showSpinner = false;
+      _services_helper__WEBPACK_IMPORTED_MODULE_2__["default"].setToken(error.response.headers.authorization);
+    });
+    axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("".concat(_services_config__WEBPACK_IMPORTED_MODULE_1__["default"].API_URL, "/v1/task_categories"), header).then(function (response) {
+      _services_helper__WEBPACK_IMPORTED_MODULE_2__["default"].setToken(response.headers.authorization);
+      _this.taskCategories = response.data.data;
+      _this.showSpinner = false;
+    })["catch"](function (error) {
+      _this.showSpinner = false;
+      _services_helper__WEBPACK_IMPORTED_MODULE_2__["default"].setToken(error.response.headers.authorization);
     });
   },
-  methods: {}
+  methods: {
+    createTask: function createTask(task) {
+      var _this2 = this;
+
+      var header = _services_helper__WEBPACK_IMPORTED_MODULE_2__["default"].getHeader();
+      task.task_list_id = this.taskListId;
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("".concat(_services_config__WEBPACK_IMPORTED_MODULE_1__["default"].API_URL, "/v1/tasks"), task, header).then(function (response) {
+        _services_helper__WEBPACK_IMPORTED_MODULE_2__["default"].setToken(response.headers.authorization);
+
+        _this2.tasks.push(response.data.data);
+      })["catch"](function (error) {
+        _services_helper__WEBPACK_IMPORTED_MODULE_2__["default"].setToken(error.response.headers.authorization);
+      });
+    },
+    getTaskListData: function getTaskListData() {
+      var _this3 = this;
+
+      var header = _services_helper__WEBPACK_IMPORTED_MODULE_2__["default"].getHeader();
+      var taskListId = this.taskListId;
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("".concat(_services_config__WEBPACK_IMPORTED_MODULE_1__["default"].API_URL, "/v1/task_lists/").concat(taskListId), header).then(function (response) {
+        _services_helper__WEBPACK_IMPORTED_MODULE_2__["default"].setToken(response.headers.authorization);
+        _this3.taskListName = response.data.data.name;
+      })["catch"](function (error) {
+        _services_helper__WEBPACK_IMPORTED_MODULE_2__["default"].setToken(error.response.headers.authorization);
+      });
+    }
+  }
 });
 
 /***/ }),
@@ -38870,7 +38945,12 @@ var render = function() {
               {
                 key: taskList.id,
                 staticClass: "list-group-item list-group-item-action",
-                attrs: { href: "#" }
+                attrs: { href: "javascript:void(0);" },
+                on: {
+                  click: function($event) {
+                    return _vm.todoList(taskList.id)
+                  }
+                }
               },
               [
                 _vm._v(
@@ -39253,11 +39333,11 @@ var render = function() {
       ref: "modal",
       staticClass: "modal fade",
       attrs: {
-        id: "Taskmodal",
-        tabindex: "-1",
-        role: "dialog",
+        "aria-hidden": "true",
         "aria-labelledby": "modalLabel",
-        "aria-hidden": "true"
+        id: "Taskmodal",
+        role: "dialog",
+        tabindex: "-1"
       }
     },
     [
@@ -39282,7 +39362,7 @@ var render = function() {
                     }
                   ],
                   staticClass: "form-control",
-                  attrs: { type: "text", id: "description" },
+                  attrs: { id: "description", type: "text" },
                   domProps: { value: _vm.task.description },
                   on: {
                     input: function($event) {
@@ -39333,19 +39413,17 @@ var render = function() {
                       }
                     }
                   },
-                  [
-                    _c("option", [_vm._v("Selcione uma categoria")]),
-                    _vm._v(" "),
-                    _c("option", [_vm._v("1")]),
-                    _vm._v(" "),
-                    _c("option", [_vm._v("2")]),
-                    _vm._v(" "),
-                    _c("option", [_vm._v("3")]),
-                    _vm._v(" "),
-                    _c("option", [_vm._v("4")]),
-                    _vm._v(" "),
-                    _c("option", [_vm._v("5")])
-                  ]
+                  _vm._l(_vm.taskCategories, function(taskCategory) {
+                    return _c(
+                      "option",
+                      {
+                        key: taskCategory.id,
+                        domProps: { value: taskCategory.id }
+                      },
+                      [_vm._v(_vm._s(taskCategory.name))]
+                    )
+                  }),
+                  0
                 )
               ]),
               _vm._v(" "),
@@ -39364,7 +39442,7 @@ var render = function() {
                     }
                   ],
                   staticClass: "form-control",
-                  attrs: { type: "datetime-local", id: "start_date" },
+                  attrs: { id: "start_date", type: "datetime-local" },
                   domProps: { value: _vm.task.start_date },
                   on: {
                     input: function($event) {
@@ -39392,7 +39470,7 @@ var render = function() {
                     }
                   ],
                   staticClass: "form-control",
-                  attrs: { type: "datetime-local", id: "end_date" },
+                  attrs: { id: "end_date", type: "datetime-local" },
                   domProps: { value: _vm.task.end_date },
                   on: {
                     input: function($event) {
@@ -39412,7 +39490,7 @@ var render = function() {
               "button",
               {
                 staticClass: "btn btn-secondary",
-                attrs: { type: "button", "data-dismiss": "modal" }
+                attrs: { "data-dismiss": "modal", type: "button" }
               },
               [_vm._v("Cancelar")]
             ),
@@ -39447,9 +39525,9 @@ var staticRenderFns = [
         {
           staticClass: "close",
           attrs: {
-            type: "button",
+            "aria-label": "Close",
             "data-dismiss": "modal",
-            "aria-label": "Close"
+            type: "button"
           }
         },
         [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
@@ -39746,56 +39824,53 @@ var render = function() {
             "div",
             [
               _c("h5", { staticClass: "card-title" }, [
-                _vm._v("Listas de Tarefas: "),
+                _vm._v("Listas de Tarefas:\n                "),
                 _c("span", { staticClass: "font-weight-bold" }, [
-                  _vm._v(_vm._s(_vm.tasks[0].task_list.name))
+                  _vm._v(
+                    "\n                    " +
+                      _vm._s(_vm.taskListName) +
+                      "\n                "
+                  )
                 ])
               ]),
               _vm._v(" "),
-              _vm._m(0),
+              _c(
+                "ul",
+                { staticClass: "list-group" },
+                _vm._l(_vm.tasks, function(task) {
+                  return _c(
+                    "li",
+                    { key: task.id, staticClass: "list-group-item" },
+                    [_vm._v(_vm._s(task.description))]
+                  )
+                }),
+                0
+              ),
               _vm._v(" "),
               _c(
                 "button",
                 {
                   staticClass: "btn btn-primary mt-4",
                   attrs: {
-                    type: "button",
+                    "data-target": "#Taskmodal",
                     "data-toggle": "modal",
-                    "data-target": "#Taskmodal"
+                    type: "button"
                   }
                 },
                 [_vm._v("\n                Nova Tarefa\n            ")]
               ),
               _vm._v(" "),
-              _c("FormTask")
+              _c("FormTask", {
+                attrs: { taskCategories: _vm.taskCategories },
+                on: { createTask: _vm.createTask }
+              })
             ],
             1
           )
     ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("ul", { staticClass: "list-group" }, [
-      _c("li", { staticClass: "list-group-item" }, [
-        _vm._v("Dapibus ac facilisis in")
-      ]),
-      _vm._v(" "),
-      _c("li", { staticClass: "list-group-item" }, [_vm._v("Morbi leo risus")]),
-      _vm._v(" "),
-      _c("li", { staticClass: "list-group-item" }, [
-        _vm._v("Porta ac consectetur ac")
-      ]),
-      _vm._v(" "),
-      _c("li", { staticClass: "list-group-item" }, [
-        _vm._v("Vestibulum at eros")
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -59532,8 +59607,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Users\pedro\Documents\Projetos\before\prova-pedro-dalvy\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\Users\pedro\Documents\Projetos\before\prova-pedro-dalvy\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! c:\Users\pedro\Documents\Projetos\before\prova-pedro-dalvy\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! c:\Users\pedro\Documents\Projetos\before\prova-pedro-dalvy\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ }),

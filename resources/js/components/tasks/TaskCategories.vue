@@ -62,6 +62,9 @@
                     this.taskCategories = response.data.data;
                     this.showSpinner = false;
                 })
+                .catch(error => {
+                    helper.setToken(error.response.headers.authorization);
+                })
         },
         methods: {
             createTaskCategory(taskCategory) {
@@ -71,6 +74,9 @@
                     .then( response => {
                         helper.setToken(response.headers.authorization);
                         this.taskCategories.push(response.data.data);
+                    })
+                    .catch(error => {
+                        helper.setToken(error.response.headers.authorization);
                     })
             },
             hideForm(showForm) {
