@@ -42,8 +42,7 @@
         data() {
             return {
                 menus: [
-                    {name: "Listas de Tarefas", routeName: 'home'},
-                    {name: "Categorias", routeName: 'home'}
+                    {name: "Categorias", routeName: 'categories'}
                 ],
                 brandRouteName: 'home'
             }

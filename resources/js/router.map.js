@@ -8,6 +8,14 @@ export default [
         }
     },
     {
+        name: 'categories',
+        path: '/task_categories',
+        components: require('./components/tasks/TaskCategories'),
+        meta: {
+            auth: true
+        }
+    },
+    {
         name: 'login',
         path: '/login',
         components: require('./components/Login')
