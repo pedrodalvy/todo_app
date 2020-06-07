@@ -59,7 +59,7 @@
                                     </small>
                                 </td>
                                 <td class=" align-items-end col-md-1 text-right">
-                                    <button class="btn btn-danger" type="button" @click="deleteTask(task.id)">
+                                    <button class="btn btn-sm btn-danger" type="button" @click="deleteTask(task.id)">
                                         <i aria-hidden="true" class="fa fa-trash"></i>
                                     </button>
                                 </td>
