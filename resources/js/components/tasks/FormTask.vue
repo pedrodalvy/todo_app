@@ -42,13 +42,6 @@
 </template>
 
 <script>
-    let task = {
-        task_category_id: '',
-        description: '',
-        end_date: '',
-        start_date: '',
-    };
-
     export default {
         name: "FormTask",
         props: ['taskCategories'],
