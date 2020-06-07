@@ -19,7 +19,7 @@ class TasksService
             'user_id' => auth()->user()->id
         ])->get()->first();
 
-        return $taskList->tasks()->paginate(Task::DEFAULT_PER_PAGE);
+        return $taskList->tasks;
     }
 
     /**
