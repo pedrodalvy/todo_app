@@ -29,6 +29,7 @@ class TaskRequest extends FormRequest
             'end_date' => 'nullable|date',
             'task_list_id' => 'required|integer',
             'task_category_id' => 'required|integer',
+            'completed' => 'boolean',
         ];
     }
 }
