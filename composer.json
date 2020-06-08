@@ -62,9 +62,7 @@
             "@php artisan key:generate --ansi"
         ],
         "post-install-cmd": [
-            "php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
-            "php -r \"file_exists('html') || symlink('public', 'html');\"",
-            "chmod -R 777 ."
+            "php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         ]
     }
 }
