@@ -1,0 +1,52 @@
+version: "3.7"
+services:
+  app:
+    build:
+      args:
+        user: sammy
+        uid: 1000
+      context: ./docker
+      dockerfile: Dockerfile
+    image: todo_list
+    container_name: todo_list
+    restart: unless-stopped
+    working_dir: /var/www/
+    volumes:
+      - ./:/var/www
+    networks:
+      - todo_list
+
+  db:
+    image: 'mysql:latest'
+    container_name: todo_list_mysql
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: todo_list
+      MYSQL_PASSWORD: root
+      MYSQL_USER: todo_list
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    volumes:
+      - ./docker/mysql:/docker-entrypoint-initdb.d
+      - ./data/db:/var/lib/mysql
+    networks:
+      - todo_list
+
+  nginx:
+    image: nginx:alpine
+    container_name: todo_list_nginx
+    restart: unless-stopped
+    ports:
+      - 8010:80
+    volumes:
+      - ./:/var/www
+      - ./docker/nginx:/etc/nginx/conf.d/
+    networks:
+      - todo_list
+
+networks:
+  todo_list:
+    driver: bridge

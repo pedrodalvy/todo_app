@@ -29,6 +29,13 @@ A aplicação possui todos os requisitos solicitados, inclusive a maioria dos it
 5. Executar o comando `php artisan migrate --seed` para geração das tabelas com dados populados.
 
 
+## Configuração do projeto com Docker
+- Montar os containers `` docker compose up``;
+- Instalar as dependências do composer `` docker-compose exec app composer install ``;
+- Instalar as dependências do composer `` docker-compose exec app php artisan migrate --seed ``;
+- Acessar a página inicial do projeto em http://localhost:8010/
+
+
 ## Documentação da API
 A documentação da api foi criada utilizando o Postman, e encontra-se disponível 
 através deste [link](https://documenter.getpostman.com/view/11654668/SztK35W4?version=latest).
