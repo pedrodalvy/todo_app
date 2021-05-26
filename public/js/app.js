@@ -2130,8 +2130,8 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       user: {
-        username: 'before',
-        password: 'before'
+        username: 'example',
+        password: '123456'
       }
     };
   },
@@ -7300,7 +7300,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.row[data-v-079f319a], .row input[data-v-079f319a] {\r\n    width: 100%;\n}\r\n", ""]);
+exports.push([module.i, "\n.row[data-v-079f319a], .row input[data-v-079f319a] {\n    width: 100%;\n}\n", ""]);
 
 // exports
 
@@ -81255,8 +81255,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! c:\Users\pedro\Documents\Projetos\before\prova-pedro-dalvy\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! c:\Users\pedro\Documents\Projetos\before\prova-pedro-dalvy\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /var/www/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /var/www/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ }),

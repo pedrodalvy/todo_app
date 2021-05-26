@@ -15,7 +15,7 @@
               integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
               crossorigin="anonymous">
 
-        <title>Prova Before</title>
+        <title>TODO App</title>
 
         <!-- Styles -->
         <link rel="stylesheet" href="{{ asset('css/app.css') }}">

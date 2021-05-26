@@ -38,8 +38,8 @@
         data() {
             return {
                 user: {
-                    username: 'before',
-                    password: 'before'
+                    username: 'example',
+                    password: '123456'
                 }
             }
         },
